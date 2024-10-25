@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/11wnlwljfcco3aat/branch/master?svg=true)](https://ci.appveyor.com/project/Metamorph/omniorb/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/0ph87i3qh6hl515t?svg=true)](https://ci.appveyor.com/project/frodon1/omniorb)
 
 # OmniORB
 
