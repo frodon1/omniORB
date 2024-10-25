@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>50",]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "omniorb"
+version = "4.2.3"
+description = "Python bindings for omniORB"
+requires-python = ">= 3.7"
+authors = [
+    { name = "Duncan Grisby et al", email = "duncan@grisby.org" },
+]
+license = {text = "LGPL for libraries, GPL for tools"}
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/metamorph-inc/omniORB"
+
+[tool.cibuildwheel]
+before-all = "yum install -y omniORB-devel openssl-devel"
+# Produce only CPython x86_64 wheels
+build = "cp*-manylinux_x86_64"

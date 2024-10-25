@@ -1,0 +1,3 @@
+include build.sh
+recursive-include omniORB *
+recursive-include omniORBpy *
