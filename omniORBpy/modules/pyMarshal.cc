@@ -2978,10 +2978,19 @@ unmarshalPyObjectWChar(cdrStream& stream, PyObject* d_o)
   OMNIORB_CHECK_TCS_W_FOR_UNMARSHAL(stream.TCS_W(), stream);
 
   Py_UNICODE  c   = stream.TCS_W()->unmarshalWChar(stream);
+#if (PY_VERSION_HEX >= 0x03030000) // Python 3.3 or later
+  PyObject*   r_o = PyUnicode_New(0, 1);
+  int   kind = PyUnicode_KIND(r_o);
+  void* data = PyUnicode_DATA(r_o);
+  CORBA::ULong len = PyUnicode_GET_LENGTH(r_o);
+  for (CORBA::ULong i=0; i<len; i++)
+    PyUnicode_WRITE(kind, data, i, c);
+#else // Python 3.0 - 3.2
   PyObject*   r_o = PyUnicode_FromUnicode(0, 1);
   Py_UNICODE* str = PyUnicode_AS_UNICODE(r_o);
   str[0]          = c;
   str[1]          = 0;
+#endif
   return r_o;
 }
 
@@ -4632,7 +4641,12 @@ copyArgumentWChar(PyObject* d_o, PyObject* a_o,
 		       omniPy::formatString("Expecting unicode, got %r",
 					    "O", a_o->ob_type));
   }
-  if (PyUnicode_GET_SIZE(a_o) != 1) {
+#if (PY_VERSION_HEX < 0x03030000) // Earlier than Python 3.3
+  CORBA::ULong len = PyUnicode_GET_SIZE(a_o);
+#else // New Unicode API
+  CORBA::ULong len = PyUnicode_GET_LENGTH(a_o);
+#endif
+  if (len != 1) {
     THROW_PY_BAD_PARAM(BAD_PARAM_WrongPythonType, compstatus,
 		       omniPy::formatString("Expecting unicode of length 1, "
 					    "got %r",
